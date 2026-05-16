@@ -15,7 +15,7 @@ public class Category {
         this.createdAt = LocalDateTime.now();
     }
 
-    
+
     public Category(int id, int userId, String name, TransactionType type, LocalDateTime createdAt) {
         validateId(id);
         validateUserId(userId);
