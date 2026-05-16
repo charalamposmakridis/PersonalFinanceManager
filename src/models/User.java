@@ -28,7 +28,7 @@ public class User {
         this.fullName = fullName == null ? "" : fullName.trim();
         this.createdAt = createdAt;
     }
-    
+
     public User(String username, String passwordHash, String fullName) {
         validateUsername(username);
         validatePasswordHash(passwordHash);
