@@ -16,27 +16,17 @@ public class User {
     }
 
     public User(int id, String username, String passwordHash, String fullName, LocalDateTime createdAt) {
-        validateId(id);
-        validateUsername(username);
-        validatePasswordHash(passwordHash);
-        validateFullName(fullName);
-        validateCreatedAt(createdAt);
-
-        this.id = id;
-        this.username = username.trim();
-        this.passwordHash = passwordHash;
-        this.fullName = fullName == null ? "" : fullName.trim();
-        this.createdAt = createdAt;
+        setId(id);
+        setUsername(username);
+        setPasswordHash(passwordHash);
+        setFullName(fullName);
+        setCreatedAt(createdAt);
     }
 
     public User(String username, String passwordHash, String fullName) {
-        validateUsername(username);
-        validatePasswordHash(passwordHash);
-        validateFullName(fullName);
-
-        this.username = username.trim();
-        this.passwordHash = passwordHash;
-        this.fullName = fullName == null ? "" : fullName.trim();
+        setUsername(username);
+        setPasswordHash(passwordHash);
+        setFullName(fullName);
         this.createdAt = LocalDateTime.now();
     }
 
@@ -58,6 +48,31 @@ public class User {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setId(int id) {
+        validateId(id);
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        validateUsername(username);
+        this.username = username.trim();
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        validatePasswordHash(passwordHash);
+        this.passwordHash = passwordHash;
+    }
+
+    public void setFullName(String fullName) {
+        validateFullName(fullName);
+        this.fullName = fullName == null ? "" : fullName.trim();
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        validateCreatedAt(createdAt);
+        this.createdAt = createdAt;
     }
 
     private void validateId(int id) {
