@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public final class DatabaseConnection {
-    private static final String DB_URL="jdbc:sqlite:PersonalFinanceManager/database/finance.db";
+    private static final String DB_URL="jdbc:sqlite:database/finance.db";
 
     public static Connection getConnection(){
         try{
