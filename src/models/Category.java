@@ -62,6 +62,8 @@ public class Category {
         return createdAt;
     }
 
+    public void setId(int id) {this.id = id;}
+
     private void validateId(int id) {
         if (id < 0) {
             throw new IllegalArgumentException("Category ID cannot be negative.");

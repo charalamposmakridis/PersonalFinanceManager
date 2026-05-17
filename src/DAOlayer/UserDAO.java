@@ -1,6 +1,7 @@
 package DAOlayer;
 
 import DatabaseHandling.DatabaseConnection;
+import models.TransactionType;
 import models.User;
 
 import java.sql.*;
@@ -186,7 +187,7 @@ public class UserDAO {
             throw new RuntimeException("Error while checking username existence"+e);
         }
     }
-    
+
     private User mapRowToUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id"),
