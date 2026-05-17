@@ -1,7 +1,6 @@
 package DAOlayer;
 
 import DatabaseHandling.DatabaseConnection;
-import models.TransactionType;
 import models.User;
 
 import java.sql.*;
