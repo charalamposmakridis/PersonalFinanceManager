@@ -147,6 +147,46 @@ public class UserDAO {
         return users;
     }
 
+    public boolean updateUserById(User user, int id) {
+        String sql = """
+            UPDATE users 
+            SET username = ?, password_hash = ?, full_name = ? 
+            WHERE id = ?
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPasswordHash());
+            pstmt.setString(3, user.getFullName());
+            pstmt.setInt(4, id);
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while updating user by id.", e);
+        }
+    }
+
+    public boolean existsByUsername(String username){
+        String sql= """
+                SELECT 1 FROM users WHERE username=?
+                """;
+
+        try(Connection conn=DatabaseConnection.getConnection();
+            PreparedStatement pstmt=conn.prepareStatement(sql)){
+
+            pstmt.setString(1,username);
+
+            try(ResultSet rs=pstmt.executeQuery()){
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while checking username existence"+e);
+        }
+    }
+    
     private User mapRowToUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id"),
