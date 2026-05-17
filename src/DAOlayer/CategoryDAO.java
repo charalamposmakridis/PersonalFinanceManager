@@ -44,6 +44,27 @@ public class CategoryDAO {
         }
     }
 
+    public boolean existsByNameAndUserId(String name, int userId) {
+        String sql = """
+            SELECT 1 FROM categories
+            WHERE name = ? AND user_id = ?
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, name);
+            pstmt.setInt(2, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while checking category existence.", e);
+        }
+    }
+
     public boolean deleteCategoryById(int id) {
 
         String sql = """
