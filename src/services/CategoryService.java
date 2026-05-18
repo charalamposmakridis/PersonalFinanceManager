@@ -63,7 +63,7 @@ public class CategoryService {
         validateCategoryId(userId);
         return categoryDAO.findAllByUserId(userId);
     }
-    
+
     private void validateCategoryId(int categoryId){
         if(categoryId<=0){
             throw new IllegalArgumentException("Category Id must be greater than zero");
