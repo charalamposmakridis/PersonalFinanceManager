@@ -42,6 +42,21 @@ public class Category {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Category(int id,int userId, String name, TransactionType type) {
+        validateUserId(userId);
+        validateName(name);
+        validateType(type);
+        validateId(id);
+
+        this.id=id;
+        this.userId = userId;
+        this.name = name.trim();
+        this.type = type;
+        this.createdAt = LocalDateTime.now();
+    }
+
+
+
     public int getId() {
         return id;
     }
