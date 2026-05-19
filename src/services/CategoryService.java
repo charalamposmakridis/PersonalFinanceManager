@@ -7,85 +7,123 @@ import models.TransactionType;
 import java.util.List;
 
 public class CategoryService {
+
     private final CategoryDAO categoryDAO;
 
-    public CategoryService(CategoryDAO categoryDAO) {
+    public CategoryService() {
         this.categoryDAO = new CategoryDAO();
     }
 
-    public Category createCategory(int user_id, String name, TransactionType type){
-        validateUserId(user_id);
+    public CategoryService(CategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
+    }
+
+    public Category createCategory(int userId, String name, TransactionType type) {
+        validateUserId(userId);
         validateCategoryName(name);
         validateTransactionType(type);
 
-        if(categoryDAO.existsByNameAndUserId(name.trim(),user_id)){
-            throw new IllegalArgumentException("Category already exists for this user");
+        if (categoryDAO.existsByNameAndUserId(name.trim(), userId)) {
+            throw new IllegalArgumentException("Category already exists for this user.");
         }
 
-        Category category=new Category(user_id,name,type);
+        Category category = new Category(userId, name, type);
         categoryDAO.addCategory(category);
 
         return category;
     }
 
-    public boolean updateCategory(int categoryId,int user_id,String name,TransactionType type){
+    public boolean updateCategory(int categoryId, int userId, String name, TransactionType type) {
         validateCategoryId(categoryId);
+        validateUserId(userId);
         validateCategoryName(name);
         validateTransactionType(type);
-        validateUserId(user_id);
 
-        Category existingCategory=categoryDAO.findCategoryById(categoryId);
+        Category existingCategory = categoryDAO.findCategoryById(categoryId);
 
-        if(existingCategory==null){
-            throw new IllegalArgumentException("Category Not found,");
+        if (existingCategory == null) {
+            throw new IllegalArgumentException("Category not found.");
         }
 
-        if(existingCategory.getUserId()!=user_id){
-            throw new IllegalArgumentException("You cannot update another user's category");
+        if (existingCategory.getUserId() != userId) {
+            throw new IllegalArgumentException("You cannot update another user's category.");
         }
 
-        Category updatedCategory=new Category(categoryId,user_id,name,type);
+        Category updatedCategory = new Category(
+                categoryId,
+                userId,
+                name,
+                type,
+                existingCategory.getCreatedAt()
+        );
 
-        return categoryDAO.updateCategoryById(updatedCategory,categoryId);
+        return categoryDAO.updateCategoryById(updatedCategory, categoryId);
     }
 
-    public boolean deleteCategory(int categoryId){
+    public boolean deleteCategory(int categoryId, int userId) {
         validateCategoryId(categoryId);
+        validateUserId(userId);
+
+        Category category = categoryDAO.findCategoryById(categoryId);
+
+        if (category == null) {
+            throw new IllegalArgumentException("Category not found.");
+        }
+
+        if (category.getUserId() != userId) {
+            throw new IllegalArgumentException("You cannot delete another user's category.");
+        }
+
         return categoryDAO.deleteCategoryById(categoryId);
     }
 
-    public Category getCategoryById(int categoryId){
+    public Category getCategoryById(int categoryId, int userId) {
         validateCategoryId(categoryId);
-        return categoryDAO.findCategoryById(categoryId);
+        validateUserId(userId);
+
+        Category category = categoryDAO.findCategoryById(categoryId);
+
+        if (category == null) {
+            return null;
+        }
+
+        if (category.getUserId() != userId) {
+            throw new IllegalArgumentException("You cannot access another user's category.");
+        }
+
+        return category;
     }
 
-    public List<Category> getAllCategoriesByUserId(int userId){
-        validateCategoryId(userId);
+    public List<Category> getAllCategoriesByUserId(int userId) {
+        validateUserId(userId);
         return categoryDAO.findAllByUserId(userId);
     }
 
-    private void validateCategoryId(int categoryId){
-        if(categoryId<=0){
-            throw new IllegalArgumentException("Category Id must be greater than zero");
+    private void validateCategoryId(int categoryId) {
+        if (categoryId <= 0) {
+            throw new IllegalArgumentException("Category ID must be greater than zero.");
         }
     }
 
-    private void validateUserId(int user_id){
-        if(user_id<=0){
-            throw new IllegalArgumentException("User Id must be greater than zero");
+    private void validateUserId(int userId) {
+        if (userId <= 0) {
+            throw new IllegalArgumentException("User ID must be greater than zero.");
         }
     }
 
-    public void validateCategoryName(String name){
-        if(name==null || name.trim().isEmpty()){
-            throw new IllegalArgumentException("Category name cannot be empty");
+    private void validateCategoryName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be empty.");
+        }
+
+        if (name.trim().length() > 50) {
+            throw new IllegalArgumentException("Category name cannot exceed 50 characters.");
         }
     }
 
-    public void validateTransactionType(TransactionType type){
-        if(type==null){
-            throw new IllegalArgumentException("Category type cannot be null");
+    private void validateTransactionType(TransactionType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Category type cannot be null.");
         }
     }
-
 }

@@ -50,10 +50,7 @@ public class UserDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
-
-            int affectedRows = pstmt.executeUpdate();
-
-            return affectedRows > 0;
+            return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Error while deleting user by id.", e);
@@ -69,10 +66,7 @@ public class UserDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
-
-            int affectedRows = pstmt.executeUpdate();
-
-            return affectedRows > 0;
+            return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException("Error while deleting user by username.", e);
@@ -149,10 +143,10 @@ public class UserDAO {
 
     public boolean updateUserById(User user, int id) {
         String sql = """
-            UPDATE users 
-            SET username = ?, password_hash = ?, full_name = ? 
-            WHERE id = ?
-            """;
+                UPDATE users
+                SET username = ?, password_hash = ?, full_name = ?
+                WHERE id = ?
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -169,21 +163,22 @@ public class UserDAO {
         }
     }
 
-    public boolean existsByUsername(String username){
-        String sql= """
-                SELECT 1 FROM users WHERE username=?
+    public boolean existsByUsername(String username) {
+        String sql = """
+                SELECT 1 FROM users WHERE username = ?
                 """;
 
-        try(Connection conn=DatabaseConnection.getConnection();
-            PreparedStatement pstmt=conn.prepareStatement(sql)){
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1,username);
+            pstmt.setString(1, username);
 
-            try(ResultSet rs=pstmt.executeQuery()){
+            try (ResultSet rs = pstmt.executeQuery()) {
                 return rs.next();
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error while checking username existence"+e);
+            throw new RuntimeException("Error while checking username existence.", e);
         }
     }
 

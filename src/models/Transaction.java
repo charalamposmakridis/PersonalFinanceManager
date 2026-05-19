@@ -20,7 +20,10 @@ public class Transaction {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Transaction(int id,int userId,int categoryId,BigDecimal amount,TransactionType type,String description,LocalDate transactionDate,LocalDateTime createdAt) {
+    public Transaction(int id, int userId, int categoryId, BigDecimal amount,
+                       TransactionType type, String description,
+                       LocalDate transactionDate, LocalDateTime createdAt) {
+
         validateId(id);
         validateUserId(userId);
         validateCategoryId(categoryId);
@@ -40,7 +43,9 @@ public class Transaction {
         this.createdAt = createdAt;
     }
 
-    public Transaction(int userId,int categoryId,BigDecimal amount,TransactionType type,String description,LocalDate transactionDate) {
+    public Transaction(int userId, int categoryId, BigDecimal amount,
+                       TransactionType type, String description,
+                       LocalDate transactionDate) {
 
         validateUserId(userId);
         validateCategoryId(categoryId);
@@ -90,7 +95,10 @@ public class Transaction {
         return createdAt;
     }
 
-    public void setId(int id) {this.id = id;}
+    public void setId(int id) {
+        validateId(id);
+        this.id = id;
+    }
 
     private void validateId(int id) {
         if (id < 0) {

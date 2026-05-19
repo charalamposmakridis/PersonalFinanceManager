@@ -15,7 +15,6 @@ public class Category {
         this.createdAt = LocalDateTime.now();
     }
 
-
     public Category(int id, int userId, String name, TransactionType type, LocalDateTime createdAt) {
         validateId(id);
         validateUserId(userId);
@@ -30,7 +29,6 @@ public class Category {
         this.createdAt = createdAt;
     }
 
-
     public Category(int userId, String name, TransactionType type) {
         validateUserId(userId);
         validateName(name);
@@ -41,21 +39,6 @@ public class Category {
         this.type = type;
         this.createdAt = LocalDateTime.now();
     }
-
-    public Category(int id,int userId, String name, TransactionType type) {
-        validateUserId(userId);
-        validateName(name);
-        validateType(type);
-        validateId(id);
-
-        this.id=id;
-        this.userId = userId;
-        this.name = name.trim();
-        this.type = type;
-        this.createdAt = LocalDateTime.now();
-    }
-
-
 
     public int getId() {
         return id;
@@ -77,7 +60,10 @@ public class Category {
         return createdAt;
     }
 
-    public void setId(int id) {this.id = id;}
+    public void setId(int id) {
+        validateId(id);
+        this.id = id;
+    }
 
     private void validateId(int id) {
         if (id < 0) {

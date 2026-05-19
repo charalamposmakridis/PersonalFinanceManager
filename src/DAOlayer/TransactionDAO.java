@@ -4,7 +4,6 @@ import DatabaseHandling.DatabaseConnection;
 import models.Transaction;
 import models.TransactionType;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,7 +56,6 @@ public class TransactionDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
-
             return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -231,7 +229,7 @@ public class TransactionDAO {
                 rs.getInt("id"),
                 rs.getInt("user_id"),
                 rs.getInt("category_id"),
-                BigDecimal.valueOf(rs.getDouble("amount")),
+                rs.getBigDecimal("amount"),
                 TransactionType.valueOf(rs.getString("type")),
                 rs.getString("description"),
                 LocalDate.parse(rs.getString("transaction_date")),
