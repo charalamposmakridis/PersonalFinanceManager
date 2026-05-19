@@ -246,4 +246,35 @@ public class TransactionService {
 
         return transactionDAO.findRecentTransactionsByUserId(userId, limit);
     }
+
+    public BigDecimal getIncomeByDateRange(int userId, LocalDate startDate, LocalDate endDate) {
+        validateUserId(userId);
+        validateDateRange(startDate, endDate);
+
+        return transactionDAO.getTotalAmountByUserIdAndTypeAndDateRange(
+                userId,
+                TransactionType.INCOME,
+                startDate,
+                endDate
+        );
+    }
+
+    public BigDecimal getExpensesByDateRange(int userId, LocalDate startDate, LocalDate endDate) {
+        validateUserId(userId);
+        validateDateRange(startDate, endDate);
+
+        return transactionDAO.getTotalAmountByUserIdAndTypeAndDateRange(
+                userId,
+                TransactionType.EXPENSE,
+                startDate,
+                endDate
+        );
+    }
+
+    public BigDecimal getBalanceByDateRange(int userId, LocalDate startDate, LocalDate endDate) {
+        BigDecimal income = getIncomeByDateRange(userId, startDate, endDate);
+        BigDecimal expenses = getExpensesByDateRange(userId, startDate, endDate);
+
+        return income.subtract(expenses);
+    }
 }
