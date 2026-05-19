@@ -217,4 +217,33 @@ public class TransactionService {
             throw new IllegalArgumentException("Start date cannot be after end date.");
         }
     }
+
+    public BigDecimal getTotalIncomeByUserId(int userId) {
+        validateUserId(userId);
+        return transactionDAO.getTotalIncomeByUserId(userId);
+    }
+
+    public BigDecimal getTotalExpensesByUserId(int userId) {
+        validateUserId(userId);
+        return transactionDAO.getTotalExpensesByUserId(userId);
+    }
+
+    public BigDecimal getBalanceByUserId(int userId) {
+        validateUserId(userId);
+
+        BigDecimal income = transactionDAO.getTotalIncomeByUserId(userId);
+        BigDecimal expenses = transactionDAO.getTotalExpensesByUserId(userId);
+
+        return income.subtract(expenses);
+    }
+
+    public List<Transaction> getRecentTransactionsByUserId(int userId, int limit) {
+        validateUserId(userId);
+
+        if (limit <= 0) {
+            throw new IllegalArgumentException("Limit must be greater than zero.");
+        }
+
+        return transactionDAO.findRecentTransactionsByUserId(userId, limit);
+    }
 }

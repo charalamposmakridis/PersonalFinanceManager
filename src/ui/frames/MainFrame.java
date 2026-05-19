@@ -1,7 +1,9 @@
 package ui.frames;
 
 import models.User;
+import ui.panels.BudgetsPanel;
 import ui.panels.CategoriesPanel;
+import ui.panels.DashboardPanel;
 import ui.panels.TransactionsPanel;
 
 import javax.swing.*;
@@ -34,11 +36,12 @@ public class MainFrame extends JFrame {
         JPanel sideBar = createSideBar();
 
         contentPanel = new JPanel(new BorderLayout());
-        showWelcomePanel();
 
         add(headerPanel, BorderLayout.NORTH);
         add(sideBar, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
+
+        showDashboardPanel();
     }
 
     private JPanel createHeaderPanel() {
@@ -68,10 +71,10 @@ public class MainFrame extends JFrame {
         JButton budgetButton = new JButton("Budgets");
         JButton reportsButton = new JButton("Reports");
 
-        dashboardButton.addActionListener(e -> showWelcomePanel());
+        dashboardButton.addActionListener(e -> showDashboardPanel());
         transactionsButton.addActionListener(e -> showTransactionsPanel());
         categoriesButton.addActionListener(e -> showCategoriesPanel());
-        budgetButton.addActionListener(e -> showPlaceholderPanel("Budgets"));
+        budgetButton.addActionListener(e -> showBudgetsPanel());
         reportsButton.addActionListener(e -> showPlaceholderPanel("Reports"));
 
         sidebarPanel.add(dashboardButton);
@@ -83,24 +86,9 @@ public class MainFrame extends JFrame {
         return sidebarPanel;
     }
 
-    private void showWelcomePanel() {
+    private void showDashboardPanel() {
         contentPanel.removeAll();
-
-        JPanel panel = new JPanel(new BorderLayout());
-
-        JLabel titleLabel = new JLabel("Personal Finance Manager", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-
-        JLabel subtitleLabel = new JLabel(
-                "Use the menu on the left to manage your finances.",
-                SwingConstants.CENTER
-        );
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-
-        panel.add(titleLabel, BorderLayout.CENTER);
-        panel.add(subtitleLabel, BorderLayout.SOUTH);
-
-        contentPanel.add(panel, BorderLayout.CENTER);
+        contentPanel.add(new DashboardPanel(loggedInUser), BorderLayout.CENTER);
         refreshContentPanel();
     }
 
@@ -113,6 +101,12 @@ public class MainFrame extends JFrame {
     private void showCategoriesPanel() {
         contentPanel.removeAll();
         contentPanel.add(new CategoriesPanel(loggedInUser), BorderLayout.CENTER);
+        refreshContentPanel();
+    }
+
+    private void showBudgetsPanel() {
+        contentPanel.removeAll();
+        contentPanel.add(new BudgetsPanel(loggedInUser), BorderLayout.CENTER);
         refreshContentPanel();
     }
 
