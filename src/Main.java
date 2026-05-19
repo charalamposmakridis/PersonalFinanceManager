@@ -1,4 +1,6 @@
+import DatabaseHandling.DatabaseInitializer;
 import models.User;
+import ui.frames.LoginFrame;
 import ui.frames.MainFrame;
 
 import javax.swing.*;
@@ -7,17 +9,13 @@ public class Main {
 
     public static void main(String[] args) {
 
+        DatabaseInitializer.initializeDatabase();
+
         SwingUtilities.invokeLater(() -> {
 
-            User testUser = new User(
-                    1,
-                    "testuser",
-                    "hashedpassword",
-                    "Test User",
-                    java.time.LocalDateTime.now()
-            );
+            LoginFrame loginFrame = new LoginFrame();
+            loginFrame.setVisible(true);
 
-            new MainFrame(testUser).setVisible(true);
         });
     }
 }
