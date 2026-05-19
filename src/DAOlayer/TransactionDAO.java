@@ -4,6 +4,7 @@ import DatabaseHandling.DatabaseConnection;
 import models.Transaction;
 import models.TransactionType;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -219,6 +220,69 @@ public class TransactionDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Error while finding transactions by date range.", e);
+        }
+
+        return transactions;
+    }
+
+    public BigDecimal getTotalIncomeByUserId(int userId) {
+        return getTotalAmountByType(userId, TransactionType.INCOME);
+    }
+
+    public BigDecimal getTotalExpensesByUserId(int userId) {
+        return getTotalAmountByType(userId, TransactionType.EXPENSE);
+    }
+
+    private BigDecimal getTotalAmountByType(int userId, TransactionType type) {
+        String sql = """
+                SELECT COALESCE(SUM(amount), 0) AS total
+                FROM transactions
+                WHERE user_id = ? AND type = ?
+                """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, type.name());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal("total");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while calculating total amount.", e);
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    public List<Transaction> findRecentTransactionsByUserId(int userId, int limit) {
+        String sql = """
+                SELECT * FROM transactions
+                WHERE user_id = ?
+                ORDER BY transaction_date DESC, id DESC
+                LIMIT ?
+                """;
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, limit);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    transactions.add(mapRowToTransaction(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while finding recent transactions.", e);
         }
 
         return transactions;
