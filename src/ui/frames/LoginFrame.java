@@ -2,7 +2,6 @@ package ui.frames;
 
 import models.User;
 import services.AuthService;
-import ui.RegisterFrame;
 
 import javax.swing.*;
 import java.awt.*;

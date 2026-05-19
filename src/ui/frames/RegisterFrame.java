@@ -1,4 +1,4 @@
-package ui;
+package ui.frames;
 
 import models.User;
 import services.AuthService;
