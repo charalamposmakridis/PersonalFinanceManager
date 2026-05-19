@@ -472,6 +472,7 @@ TransactionDAO.addTransaction()
 
 ---
 
+
 ## Generate Reports
 
 ```text
