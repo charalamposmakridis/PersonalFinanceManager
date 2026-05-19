@@ -1,6 +1,7 @@
 package ui.frames;
 
 import models.User;
+import ui.panels.CategoriesPanel;
 import ui.panels.TransactionsPanel;
 
 import javax.swing.*;
@@ -69,7 +70,7 @@ public class MainFrame extends JFrame {
 
         dashboardButton.addActionListener(e -> showWelcomePanel());
         transactionsButton.addActionListener(e -> showTransactionsPanel());
-        categoriesButton.addActionListener(e -> showPlaceholderPanel("Categories"));
+        categoriesButton.addActionListener(e -> showCategoriesPanel());
         budgetButton.addActionListener(e -> showPlaceholderPanel("Budgets"));
         reportsButton.addActionListener(e -> showPlaceholderPanel("Reports"));
 
@@ -106,6 +107,12 @@ public class MainFrame extends JFrame {
     private void showTransactionsPanel() {
         contentPanel.removeAll();
         contentPanel.add(new TransactionsPanel(loggedInUser), BorderLayout.CENTER);
+        refreshContentPanel();
+    }
+
+    private void showCategoriesPanel() {
+        contentPanel.removeAll();
+        contentPanel.add(new CategoriesPanel(loggedInUser), BorderLayout.CENTER);
         refreshContentPanel();
     }
 
