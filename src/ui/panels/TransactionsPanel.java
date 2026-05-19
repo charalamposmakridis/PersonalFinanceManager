@@ -1,5 +1,7 @@
 package ui.panels;
 
+import ui.dialogs.AddTransactionsDialog;
+
 import models.Transaction;
 import models.User;
 import services.TransactionService;
@@ -62,7 +64,7 @@ public class TransactionsPanel extends JPanel {
         JButton deleteButton = new JButton("Delete");
         JButton refreshButton = new JButton("Refresh");
 
-        addButton.addActionListener(e -> showAddTransactionMessage());
+        addButton.addActionListener(e -> openAddTransactionsDialog());
         deleteButton.addActionListener(e -> deleteSelectedTransaction());
         refreshButton.addActionListener(e -> loadTransactions());
 
@@ -136,6 +138,21 @@ public class TransactionsPanel extends JPanel {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+        }
+    }
+
+    private void openAddTransactionsDialog() {
+
+        AddTransactionsDialog dialog =
+                new AddTransactionsDialog(
+                        (JFrame) SwingUtilities.getWindowAncestor(this),
+                        loggedInUser
+                );
+
+        dialog.setVisible(true);
+
+        if (dialog.isTransactionAdded()) {
+            loadTransactions();
         }
     }
 

@@ -1,7 +1,5 @@
 import DatabaseHandling.DatabaseInitializer;
-import models.User;
 import ui.frames.LoginFrame;
-import ui.frames.MainFrame;
 
 import javax.swing.*;
 
