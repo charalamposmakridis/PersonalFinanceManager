@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
 
     private void initializeFrame() {
         setTitle("Personal Finance Manager");
-        setSize(900, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
