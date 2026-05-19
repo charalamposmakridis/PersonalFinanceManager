@@ -68,23 +68,26 @@ public class LoginFrame extends JFrame {
     }
 
     private void handleLogin() {
+
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
         try {
+
             User loggedInUser = authService.login(username, password);
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Welcome, " + loggedInUser.getUsername() + "!",
-                    "Login Successful",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            new MainFrame(loggedInUser).setVisible(true);
+
             dispose();
 
         } catch (IllegalArgumentException ex) {
+
             messageLabel.setText(ex.getMessage());
+
         } catch (Exception ex) {
+
+            ex.printStackTrace();
+
             messageLabel.setText("Something went wrong. Please try again.");
         }
     }

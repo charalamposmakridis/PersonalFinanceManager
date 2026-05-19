@@ -4,6 +4,7 @@ import models.User;
 import ui.panels.BudgetsPanel;
 import ui.panels.CategoriesPanel;
 import ui.panels.DashboardPanel;
+import ui.panels.ReportsPanel;
 import ui.panels.TransactionsPanel;
 
 import javax.swing.*;
@@ -16,7 +17,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame(User loggedInUser) {
         this.loggedInUser = loggedInUser;
-
         initializeFrame();
         initializeComponents();
     }
@@ -32,13 +32,10 @@ public class MainFrame extends JFrame {
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
-        JPanel headerPanel = createHeaderPanel();
-        JPanel sideBar = createSideBar();
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(createSideBar(), BorderLayout.WEST);
 
         contentPanel = new JPanel(new BorderLayout());
-
-        add(headerPanel, BorderLayout.NORTH);
-        add(sideBar, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
 
         showDashboardPanel();
@@ -68,59 +65,47 @@ public class MainFrame extends JFrame {
         JButton dashboardButton = new JButton("Dashboard");
         JButton transactionsButton = new JButton("Transactions");
         JButton categoriesButton = new JButton("Categories");
-        JButton budgetButton = new JButton("Budgets");
+        JButton budgetsButton = new JButton("Budgets");
         JButton reportsButton = new JButton("Reports");
 
         dashboardButton.addActionListener(e -> showDashboardPanel());
         transactionsButton.addActionListener(e -> showTransactionsPanel());
         categoriesButton.addActionListener(e -> showCategoriesPanel());
-        budgetButton.addActionListener(e -> showBudgetsPanel());
-        reportsButton.addActionListener(e -> showPlaceholderPanel("Reports"));
+        budgetsButton.addActionListener(e -> showBudgetsPanel());
+        reportsButton.addActionListener(e -> showReportsPanel());
 
         sidebarPanel.add(dashboardButton);
         sidebarPanel.add(transactionsButton);
         sidebarPanel.add(categoriesButton);
-        sidebarPanel.add(budgetButton);
+        sidebarPanel.add(budgetsButton);
         sidebarPanel.add(reportsButton);
 
         return sidebarPanel;
     }
 
     private void showDashboardPanel() {
-        contentPanel.removeAll();
-        contentPanel.add(new DashboardPanel(loggedInUser), BorderLayout.CENTER);
-        refreshContentPanel();
+        switchPanel(new DashboardPanel(loggedInUser));
     }
 
     private void showTransactionsPanel() {
-        contentPanel.removeAll();
-        contentPanel.add(new TransactionsPanel(loggedInUser), BorderLayout.CENTER);
-        refreshContentPanel();
+        switchPanel(new TransactionsPanel(loggedInUser));
     }
 
     private void showCategoriesPanel() {
-        contentPanel.removeAll();
-        contentPanel.add(new CategoriesPanel(loggedInUser), BorderLayout.CENTER);
-        refreshContentPanel();
+        switchPanel(new CategoriesPanel(loggedInUser));
     }
 
     private void showBudgetsPanel() {
-        contentPanel.removeAll();
-        contentPanel.add(new BudgetsPanel(loggedInUser), BorderLayout.CENTER);
-        refreshContentPanel();
+        switchPanel(new BudgetsPanel(loggedInUser));
     }
 
-    private void showPlaceholderPanel(String title) {
-        contentPanel.removeAll();
-
-        JLabel label = new JLabel(title + " panel will be implemented next.", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 22));
-
-        contentPanel.add(label, BorderLayout.CENTER);
-        refreshContentPanel();
+    private void showReportsPanel() {
+        switchPanel(new ReportsPanel(loggedInUser));
     }
 
-    private void refreshContentPanel() {
+    private void switchPanel(JPanel panel) {
+        contentPanel.removeAll();
+        contentPanel.add(panel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
