@@ -288,6 +288,36 @@ public class TransactionDAO {
         return transactions;
     }
 
+    public BigDecimal getTotalAmountByUserIdAndTypeAndDateRange(int userId, TransactionType type, LocalDate startDate, LocalDate endDate) {
+        String sql = """
+            SELECT COALESCE(SUM(amount), 0) AS total
+            FROM transactions
+            WHERE user_id = ?
+            AND type = ?
+            AND transaction_date BETWEEN ? AND ?
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, type.name());
+            pstmt.setString(3, startDate.toString());
+            pstmt.setString(4, endDate.toString());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal("total");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while calculating report total.", e);
+        }
+
+        return BigDecimal.ZERO;
+    }
+
     private Transaction mapRowToTransaction(ResultSet rs) throws SQLException {
         return new Transaction(
                 rs.getInt("id"),

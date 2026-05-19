@@ -18,8 +18,6 @@ public class Main {
             );
 
             new MainFrame(testUser).setVisible(true);
-
-            new MainFrame(testUser).setVisible(true);
         });
     }
 }
